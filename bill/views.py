@@ -8,23 +8,28 @@ from datetime import date
 from django.db.models import Q, Count, Sum
 from .serializers import BillSerializer
 from .serializers import InvestorWithBillsSerializer
+from django.utils import timezone
+from datetime import datetime
 
 class GenerateBillView(APIView):
     def post(self, request, investor_id):
         bill_type = request.data.get('bill_type')
         fee_percentage = request.data.get('fee_percentage')
         due_date = request.data.get('date')
+        investment_amount= request.data.get('investment_amount')
+        investment_date = request.data.get('investment_date')
 
         try:
             investor = Investor.objects.get(id=investor_id)
             amount = 0
+            parsed_date = datetime.strptime(investment_date, '%Y-%m-%d').date()
 
             if bill_type == 'membership':
-                amount = Bill.calculate_membership_fee(investor)
+                amount = Bill.calculate_membership_fee(investment_amount)
             elif bill_type == 'upfront':
-                amount = Bill.calculate_upfront_fee(investor, fee_percentage)
+                amount = Bill.calculate_upfront_fee(investment_amount, fee_percentage)
             elif bill_type == 'yearly':
-                amount = Bill.calculate_yearly_fee(investor, fee_percentage)
+                amount = Bill.calculate_yearly_fee(parsed_date,investment_amount, fee_percentage)
             else:
                 return Response({"error": "Invalid bill type"}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -33,7 +38,10 @@ class GenerateBillView(APIView):
                 bill_type=bill_type,
                 amount=amount,
                 due_date=due_date,
-                bill_status='pending'
+                bill_status='pending',
+                investment_amount=investment_amount,
+                investment_date=investment_date,
+
             )
 
             return Response({

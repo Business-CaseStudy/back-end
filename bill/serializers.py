@@ -16,4 +16,4 @@ class InvestorWithBillsSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Investor
-        fields = ['id', 'name', 'investment_amount', 'investment_date', 'bills']  # Adjust fields as needed
+        fields = ['id', 'name', 'iban','bills']  # Adjust fields as needed
