@@ -90,3 +90,13 @@ class UpdateCapitalCallStatusView(APIView):
             return Response({"detail": "Invalid status provided."}, status=status.HTTP_400_BAD_REQUEST)
         except CapitalCall.DoesNotExist:
             return Response({"detail": "Capital Call not found."}, status=status.HTTP_404_NOT_FOUND)
+        
+class CapitalCallDetailView(APIView):
+    def get(self, request, pk):
+        try:
+            capital_call = CapitalCall.objects.get(pk=pk)
+        except CapitalCall.DoesNotExist:
+            return Response({"error": "Capital Call not found"}, status=status.HTTP_404_NOT_FOUND)
+        
+        serializer = CapitalCallSerializer(capital_call)
+        return Response(serializer.data, status=status.HTTP_200_OK)

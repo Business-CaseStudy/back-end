@@ -6,4 +6,5 @@ class CapitalCallSerializer(serializers.ModelSerializer):
     class Meta:
         model = CapitalCall
         fields = ['id', 'investor', 'total_amount', 'bills', 'created_date', 'status']
+        # fields = ['id', 'investor', 'total_amount', 'bills', 'created_date', 'status']
         # fields = '__all__'
