@@ -56,7 +56,7 @@ class GenerateBillView(APIView):
         except Investor.DoesNotExist:
             return Response({"error": "Investor not found"}, status=status.HTTP_404_NOT_FOUND)
     def get(self, request):
-        # Query all bills and group them by investor
+
         bills = Bill.objects.values('investor').annotate(
             total_amount=Sum('amount'),
             bill_count=Count('id'),
@@ -83,25 +83,6 @@ class GenerateBillView(APIView):
         return Response(result, status=status.HTTP_200_OK)
   
 class GenerateBillView2(APIView):
-    # def post(self, request, bill_id):
-    #     try:
-    #         # Fetch the bill by ID
-    #         bill = Bill.objects.get(id=bill_id)
-
-    #         # Check if the bill is already validated or paid
-    #         if bill.bill_status in ['validated', 'paid']:
-    #             return Response({"detail": "This bill is already validated or paid."},
-    #                             status=status.HTTP_400_BAD_REQUEST)
-
-    #         # Mark the bill as validated
-    #         bill.bill_status = 'validated'
-    #         bill.save()
-
-    #         return Response({"detail": "Bill has been validated successfully."},
-    #                         status=status.HTTP_200_OK)
-
-    #     except Bill.DoesNotExist:
-    #         return Response({"detail": "Bill not found."},status=status.HTTP_404_NOT_FOUND)
     def post(self, request):
         bill_ids = request.data.get('bill_ids', [])
 
@@ -113,14 +94,14 @@ class GenerateBillView2(APIView):
 
         for bill_id in bill_ids:
             try:
-                # Fetch the bill by ID
+               
                 bill = Bill.objects.get(id=bill_id)
 
-                # Check if the bill is already validated or paid
+                
                 if bill.bill_status in ['validated', 'paid']:
                     errors.append(f"Bill with ID {bill_id} is already validated or paid.")
                 else:
-                    # Mark the bill as validated
+                   
                     bill.bill_status = 'validated'
                     bill.save()
                     validated_bills.append(bill_id)
@@ -139,11 +120,9 @@ class GenerateBillView2(APIView):
         return Response(response_data, status=status.HTTP_200_OK)    
     def get(self, request, investor_id):
         try:
-             # Retrieve the specific investor
+           
             investor = Investor.objects.get(id=investor_id)
             bills = Bill.objects.filter(investor=investor)
-            
-            # Use the serializer to include bills in the investor data
             serializer = InvestorWithBillsSerializer(investor)
             return Response(serializer.data, status=status.HTTP_200_OK)
         except Investor.DoesNotExist:

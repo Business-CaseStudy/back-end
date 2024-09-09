@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invoice</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+   
+        .invoice-header, .invoice-footer {
+            margin-left : 30px
+        }
+        .invoice-body {
+            margin-top: 50px;
+            margin-left : 30px ; 
+            font-size: 16px;
+        }
+      
+        .date-position{
+            margin-left : 40px ; 
+        }
+        .DueDate-position{
+            margin-top : 50px ; 
+            
+        }
+        .information-position{
+            margin-top : 50px ; 
+            
+        }
+    </style>
+</head>
+<body>
+    <div >
+        <div class="invoice-header">
+          
+           
+            <img src="https://firebasestorage.googleapis.com/v0/b/dreamoptique-f82ef.appspot.com/o/ARCHIMED_LOGO_BLACK_RGB.png?alt=media" alt="Archimed Logo"
+            style="width : '250px'">
+        </div>
+        <div class="invoice-body">
+            <p class="Iban-position">IBAN : {{ IBAN }}</p>
+            <p class="DueDate-position">Due Date:  {{ DueDate }}</p>
+            <div  class="information-position">
+            <p>From: {{ From }}</p>
+            <p>To: {{ To }}</p>
+            <p>email: {{ Email }}</p>
+            </div>
+            <p class="information-position">Total Amount: EUR {{ TotalAmount }}     </p>
+               
+                    <p style="text-align: right;"> Date: {{ DateInvoice }}</p>
+                
+           
+        </div>
+       
+    </div>
+</body>
+</html>

@@ -60,10 +60,11 @@ ROOT_URLCONF = 'capitalcall.urls'
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
 ]
+import os
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR,  'capital', 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -77,7 +78,10 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'capitalcall.wsgi.application'
-
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [
+    BASE_DIR / "static",
+]
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
@@ -130,3 +134,10 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_USE_TLS = False
+EMAIL_PORT = 465
+EMAIL_USE_SSL = True
+EMAIL_HOST_USER = 'contact.fithealth23@gmail.com' 
+EMAIL_HOST_PASSWORD = 'ebrh bilu ygsn zrkw'

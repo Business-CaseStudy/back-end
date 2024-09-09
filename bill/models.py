@@ -40,38 +40,25 @@ class Bill(models.Model):
         return fee_percentage * Decimal(investment_amount) * 5
 
     @staticmethod
-    # def calculate_yearly_fee(investor, fee_percentage):
-    #     current_year = date.today().year
-    #     investment_year = investor.investment_date.year
-    #     fee_percentage = Decimal(fee_percentage)
-
-    #     # Yearly fees calculation depending on the investment date and year
-    #     if current_year == investment_year:
-    #         days_invested = (date.today() - investor.investment_date).days
-    #         days_in_year = 365 if (investment_year % 4 == 0 and investment_year % 100 != 0) or (investment_year % 400 == 0) else 365
-    #         return (days_invested / days_in_year) * fee_percentage * investor.investment_amount
-    #     elif current_year == investment_year + 1:
-    #         return fee_percentage * investor.investment_amount
-    #     elif current_year == investment_year + 2:
-    #         return (fee_percentage - 0.002) * investor.investment_amount
-    #     elif current_year == investment_year + 3:
-    #         return (fee_percentage - 0.005) * investor.investment_amount
-    #     else:
-    #         return (fee_percentage - 0.01) * investor.investment_amount
     def calculate_yearly_fee(investment_date,investment_amount, fee_percentage):
         current_year = date.today().year
         investment_year = investment_date.year
         fee_percentage = Decimal(fee_percentage)
+        
+        cutoff_date = date(2019, 4, 1)
+        is_after_cutoff = investment_date >= cutoff_date
 
         if current_year == investment_year:
-            days_invested = (date.today() - investment_date).days
-            days_in_year = Decimal(365)  # Convert to Decimal
+            if is_after_cutoff:
+               
+                days_invested = (date.today() - investment_date).days
+                days_in_year = Decimal(365)
+                if (investment_year % 4 == 0 and investment_year % 100 != 0) or (investment_year % 400 == 0):
+                    days_in_year = Decimal(366)
+                return (Decimal(days_invested) / days_in_year) * fee_percentage * Decimal(investment_amount)
+            else:
+                return (Decimal(investment_date.timetuple().tm_yday) / 365) * fee_percentage * Decimal(investment_amount)
 
-            # Adjust for leap years
-            if (investment_year % 4 == 0 and investment_year % 100 != 0) or (investment_year % 400 == 0):
-                days_in_year = Decimal(366)
-
-            return (Decimal(days_invested) / days_in_year) * fee_percentage * Decimal(investment_amount)
         elif current_year == investment_year + 1:
             return fee_percentage * Decimal(investment_amount)
         elif current_year == investment_year + 2:

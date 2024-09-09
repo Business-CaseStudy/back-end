@@ -2,10 +2,7 @@ from rest_framework import serializers
 from .models import Bill
 from investor.models import Investor
 
-# class InvestorSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = Investor
-#         fields = ['id', 'name', 'investment_amount', 'investment_date']  # Adjust fields as needed
+
 class BillSerializer(serializers.ModelSerializer):
     class Meta:
         model = Bill
@@ -16,4 +13,4 @@ class InvestorWithBillsSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Investor
-        fields = ['id', 'name', 'iban','bills']  # Adjust fields as needed
+        fields = ['id', 'name', 'iban','bills']  
